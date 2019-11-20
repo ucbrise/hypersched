@@ -1,0 +1,5 @@
+SCORES_FILE = "scores_per_epoch.npy"
+HIGH_SCORES_FILE = "high_scores.npy"
+ALLOCATION_FILE = "alloc_per_epoch.npy"
+RANK_SCORE_FILE = "rank_score.pkl"
+JOBS_FILE = "jobs.pkl"

@@ -1,0 +1,62 @@
+# An unique identifier for the head node and workers of this cluster.
+cluster_name: ablation
+
+# The maximum number of workers nodes to launch in addition to the head
+# node. This takes precedence over min_workers. min_workers default to 0.
+min_workers: 0
+max_workers: 0
+
+# docker:
+#     image: tensorflow/tensorflow:1.5.0-py3
+#     container_name: ray_docker
+
+# Cloud-provider specific configuration.
+provider:
+    type: aws
+    region: us-east-1
+    # availability_zone: us-east-1a
+
+# How Ray will authenticate with newly launched nodes.
+auth:
+    ssh_user: ubuntu
+
+head_node:
+    InstanceType: c5.9xlarge
+    ImageId: ami-0d96d570269578cd7
+    InstanceMarketOptions:
+        MarketType: spot
+        SpotOptions:
+            MaxPrice: "5.0"
+    BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+              VolumeSize: 150
+
+# worker_nodes:
+#     InstanceType: c5.9xlarge
+#     ImageId: ami-0d96d570269578cd7
+#     InstanceMarketOptions:
+#         MarketType: spot
+#         SpotOptions:
+#             MaxPrice: "1.0"
+#     BlockDeviceMappings:
+#         - DeviceName: /dev/sda1
+#           Ebs:
+#               VolumeSize: 150
+
+setup_commands:
+    - pip install torch torchvision filelock ray[rllib] tensorboard pandas ipdb #tensorflow-gpu==1.12.0 ipdb ray[rllib]
+    - >
+        cd hypersched &&
+        pip install -e ./
+
+
+file_mounts: {
+    "~/hypersched/": riselab/hypersched/
+}
+
+# Custom commands that will be run on the head node after common setup.
+head_setup_commands: []
+
+# Custom commands that will be run on worker nodes after common setup.
+worker_setup_commands: []
