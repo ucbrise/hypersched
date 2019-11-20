@@ -157,9 +157,7 @@ def accuracy(output, target, topk=(1,)):
 
 
 # def train(train_loader, model, criterion, optimizer, max_steps=None):
-def train(
-    train_loader, model, criterion, optimizer, epoch, max_steps=None
-):
+def train(train_loader, model, criterion, optimizer, epoch, max_steps=None):
 
     batch_time = AverageMeter()
     data_time = AverageMeter()
