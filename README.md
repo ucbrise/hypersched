@@ -12,8 +12,11 @@ People: Richard Liaw, Romil Bhardwaj, Lisa Dunlap, Yitian Zou, Joseph E. Gonzale
 
 HyperSched a dynamic application-level resource scheduler to track, identify, and preferentially allocate resources to the best performing trials to maximize accuracy by the deadline.
 
-HyperSched is implemented as a `TrialScheduler` of Ray Tune.
-Published at SOCC 2019.
+<div align="center">
+   <p align="center"> <img src="figs/scheduler.png" height=240p><br></p>
+</div>
+
+HyperSched is implemented as a `TrialScheduler` of [Ray Tune](http://tune.io/).
 
 ## Quick Start
 
