@@ -1,5 +1,5 @@
 <div align="center">
-   <p align="center"> <img src="figs/hypersched-logo.png" height=240px； weight=320px；"><br></p>
+   <p align="center"> <img src="figs/hypersched-logo.png" height=240p weight=320px><br></p>
 </div>
 
 # HyperSched
