@@ -1,3 +1,7 @@
+<div align="center">
+   <p align="center"> <img src="figs/hypersched-logo.png" height=240px； weight=320px；><br></p>
+</div>
+
 # HyperSched
 
 An experimental scheduler for accelerated hyperparameter tuning.
