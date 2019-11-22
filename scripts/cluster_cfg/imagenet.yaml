@@ -1,5 +1,5 @@
 # An unique identifier for the head node and workers of this cluster.
-cluster_name: test
+cluster_name: imagenet
 
 # The maximum number of workers nodes to launch in addition to the head
 # node. This takes precedence over min_workers. min_workers default to 0.
@@ -70,7 +70,7 @@ worker_nodes:
 setup_commands:
     - sudo mkdir /data || true
     - sudo mount /dev/xvdm /data || true
-    - pip install https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.8.0.dev5-cp36-cp36m-manylinux1_x86_64.whl
+    - pip install -U ray==0.7.6
     - pip install torch torchvision filelock ray[rllib] tensorboard pandas ipdb #tensorflow-gpu==1.12.0 ipdb ray[rllib]
     - >
         cd hypersched &&

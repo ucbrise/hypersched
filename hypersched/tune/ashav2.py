@@ -9,7 +9,6 @@ from ray.tune.trial import Trial
 from ray.tune.schedulers import (
     FIFOScheduler,
     TrialScheduler,
-    AsyncHyperBandScheduler,
 )
 
 logger = logging.getLogger(__name__)

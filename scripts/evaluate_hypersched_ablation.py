@@ -36,7 +36,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--config", default="", type=str, help="Config name.")
     parser.add_argument(
-        "--num-jobs", default=1, type=int, help="Number of jobs to launch."
+        "--num-jobs", default=1, type=int, help="Number of jobs to launch.",
     )
     parser.add_argument(
         "--delay",
@@ -51,10 +51,10 @@ if __name__ == "__main__":
         help="Seconds of delay per for startup",
     )
     parser.add_argument(
-        "--global-deadline", default=50, type=int, help="Target deadline."
+        "--global-deadline", default=50, type=int, help="Target deadline.",
     )
     parser.add_argument(
-        "--seed", default=0, type=int, help="Number of jobs to launch."
+        "--seed", default=0, type=int, help="Number of jobs to launch.",
     )
     parser.add_argument("--max-t", type=int, help="Max epochs/iterations.")
     parser.add_argument(
@@ -75,12 +75,12 @@ if __name__ == "__main__":
     # We want to show that limiting different amounts of jobs
     # will result in degraded performance.
     parser.add_argument(
-        "--no-job-limit", action="store_true", help="Does not limit jobs run."
+        "--no-job-limit", action="store_true", help="Does not limit jobs run.",
     )
     # We want to show that the linear assumption can really hurt
     #
     parser.add_argument(
-        "--assume-linear", action="store_true", help="Assumes linear scaling."
+        "--assume-linear", action="store_true", help="Assumes linear scaling.",
     )
     # We want to show that a more exploitative policy
     # is not better
@@ -90,7 +90,7 @@ if __name__ == "__main__":
         help="Fix the exploration time.",
     )
     parser.add_argument(
-        "--exploration-ratio", type=float, help="Ratio of exploration time."
+        "--exploration-ratio", type=float, help="Ratio of exploration time.",
     )
     parser.add_argument(
         "--scaling",
@@ -99,7 +99,7 @@ if __name__ == "__main__":
         help="Scaling for trainable. Defaults to linear scaling on Trainable.",
     )
     parser.add_argument(
-        "--no-speculation", action="store_true", help="No speculation."
+        "--no-speculation", action="store_true", help="No speculation.",
     )
 
     parser.add_argument("--result-file", default="./ablation.log", type=str)

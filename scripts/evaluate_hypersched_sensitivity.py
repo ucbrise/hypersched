@@ -34,7 +34,7 @@ if __name__ == "__main__":
         help="Number of atoms to launch Ray with.",
     )
     parser.add_argument(
-        "--num-jobs", default=1, type=int, help="Number of jobs to launch."
+        "--num-jobs", default=1, type=int, help="Number of jobs to launch.",
     )
     parser.add_argument(
         "--delay",
@@ -49,10 +49,10 @@ if __name__ == "__main__":
         help="Seconds of delay per for startup",
     )
     parser.add_argument(
-        "--global-deadline", default=1200, type=int, help="Target deadline."
+        "--global-deadline", default=1200, type=int, help="Target deadline.",
     )
     parser.add_argument(
-        "--seed", default=0, type=int, help="Number of jobs to launch."
+        "--seed", default=0, type=int, help="Number of jobs to launch.",
     )
 
     args = parser.parse_args(sys.argv[1:])
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     trials = tune.run(
         trainable,
         name=f"{type(sched).__name__}-{timestring()}-jobs={args.num_jobs}-atoms={args.num_atoms}",
-        **{"num_samples": args.num_jobs, "config": config, "verbose": 1},
+        **{"num_samples": args.num_jobs, "config": config, "verbose": 1,},
         local_dir=f"~/socc_playground/",
         scheduler=sched,
         resources_per_trial=trainable.to_resources(1)._asdict(),

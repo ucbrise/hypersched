@@ -1,16 +1,13 @@
 import numpy as np
-import json
-import os
 import time
 import logging
+import cloudpickle
 
 from hypersched.tune import ResourceTrainable
-from hypersched.utils import check
 from hypersched.function import OptimusFunction
 
 from ray import tune
-from ray.tune.schedulers import FIFOScheduler, TrialScheduler
-from ray.tune.trial import Resources, Trial
+from ray.tune.trial import Resources
 
 logger = logging.getLogger(__name__)
 
@@ -35,12 +32,11 @@ DEFAULT_HSPACE = {
 }
 
 DEFAULT_MULTIJOB_CONFIG = {
-    "min_allocation": 5,  # Model setup time can be 20, overall first epoch setup can take up to 100
+    # Model setup time can be 20, overall first epoch setup can take up to 100
+    "min_allocation": 5,
     "max_allocation": 500,
     "time_attr": "training_iteration",
 }
-
-import cloudpickle
 
 
 class OptimusTrainable(ResourceTrainable):
@@ -65,7 +61,11 @@ class OptimusTrainable(ResourceTrainable):
             np.random.seed(config["seed"])
         self._delay = config["delay"]
         time.sleep(config.get("startup_delay", 0))
-        params = [config["param1"], config["param2"], config["param3"]]
+        params = [
+            config["param1"],
+            config["param2"],
+            config["param3"],
+        ]
         self._initial_samples_per_step = 500
         self.func = OptimusFunction(
             params=params, scaling=self.config["scaling"]

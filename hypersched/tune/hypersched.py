@@ -2,15 +2,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from collections import defaultdict
 import logging
 import time
-import os
 
 import numpy as np
 
 from hypersched.tune.dyn_allocator import DynamicAllocator
-from hypersched.tune.trainables.utils import EarlyStopper
 from hypersched.tune.ashav2 import _Bracket as ASHAv2Bracket
 from hypersched.tune.ashav2 import ASHAv2
 from ray.tune.trial import Trial
@@ -23,9 +20,9 @@ logger.setLevel(logging.DEBUG)
 TERM_STATES = (Trial.ERROR, Trial.TERMINATED)
 
 SCALING_MAP = {
-    "NONE": {1: 1, 2: 1, 4: 1, 8: 1, 16: 1, 32: 1,},
-    "SQRT": {1: 1, 2: 1.4, 4: 2, 8: 2.8, 16: 4, 32: 5.7,},
-    "HALF": {1: 1, 2: 1, 4: 2, 8: 4, 16: 8, 32: 16,},
+    "NONE": {1: 1, 2: 1, 4: 1, 8: 1, 16: 1, 32: 1},
+    "SQRT": {1: 1, 2: 1.4, 4: 2, 8: 2.8, 16: 4, 32: 5.7},
+    "HALF": {1: 1, 2: 1, 4: 2, 8: 4, 16: 8, 32: 16},
     "LINEAR": dict((i, i) for i in range(1, 32)),
 }
 
@@ -36,7 +33,6 @@ def scaling_function_from_dict(throughput_map, total_atoms=None):
             query, list(throughput_map.keys()), list(throughput_map.values())
         )
 
-    # max_scale = max(np.r_[1:total_atoms + 1], key=scaling_function)
     return scaling_function
 
 
@@ -69,17 +65,13 @@ class HyperSched(FIFOScheduler):
         _fixed_exploration=False,
         _exploration_ratio=1.0,
     ):
-        # super().__init__(grace_period=grace_period, **asha_args)
-
-        #########################################
-        ## Arguments for ablative study
+        # Arguments for ablative study
         self._no_speculation = _no_speculation  # stored
         self._ignore_overhead = _ignore_overhead  # stored
         self._no_job_limit = _no_job_limit  # stored
         self._assume_linear = _assume_linear
         self._fixed_exploration = _fixed_exploration
         self._exploration_ratio = _exploration_ratio
-        ##########################################
         FIFOScheduler.__init__(self)
 
         self.use_pausing = use_pausing
@@ -165,7 +157,8 @@ class HyperSched(FIFOScheduler):
         )
         self.allocator.populate_if_needed(self.get_live_trials(trial_runner))
 
-        # This is commented out because there is no "safe" way to argue for this.
+        # This is commented out because there is no "safe" way to argue
+        # for this.
         # if self.time_left < self._deadline / self._reduction_factor:
         #     logger.warning("Since time left is less than reduction factor, "
         #                    f"POLICY IS TOP_JOB")
@@ -178,7 +171,7 @@ class HyperSched(FIFOScheduler):
         )
 
         if decision == TrialScheduler.CONTINUE:
-            # Check if with the new allocation, there is improvement in progress
+            # Check if with the new allocation, there is improvement
             check(self.allocator.get_proposed_atoms(trial))
             if self._improved_progress_after_reallocation(trial):
                 self.allocator.try_execute_update(trial, trial_runner)
@@ -216,16 +209,12 @@ class HyperSched(FIFOScheduler):
             )
         else:
             logger.debug(
-                f"Projected {new_progress:0.3f} ~< {old_progress:0.3f}. Not updating."
+                f"Projected {new_progress:0.3f} ~< {old_progress:0.3f}. "
+                "Not updating."
             )
         return execute
 
     def choose_trial_to_run(self, trial_runner):
-        # If trials is not going to complete AND passed the minimum exploration time.
-        time_passed = time.time() - self.start_time
-        # minimum_explore_time = self._deadline / self._reduction_factor
-        # if time_passed > minimum_explore_time:
-
         fair_allocation = (
             self._longest_duration - self.startup_time
         ) * self._reduction_factor
@@ -246,8 +235,9 @@ class HyperSched(FIFOScheduler):
 
         elif self.time_left < fair_allocation:
             logger.debug(
-                f"Time left: {self.time_left}. Fair Allocation: {fair_allocation}."
-                " Not running new trial."
+                f"Time left: {self.time_left}. "
+                f"Fair Allocation: {fair_allocation}. "
+                "Not running new trial."
             )
             for t in self.get_pending(trial_runner):
                 t.status = Trial.TERMINATED
@@ -262,12 +252,15 @@ class HyperSched(FIFOScheduler):
         return super().choose_trial_to_run(trial_runner)
 
     def debug_string(self):
-        title = f"Hypersched: {self._deadline:.3f}. Time left: {self._deadline_time - time.time():.3f}"
+        title = (
+            f"Hypersched: {self._deadline:.3f}. "
+            "Time left: {self._deadline_time - time.time():.3f}"
+        )
         startup_time = f"Calculated startup time: {self.startup_time:.3f}"
         expected_time = (
             f"Expected New Trial Duration: {self.expected_trial_duration:.3f}"
         )
-        status = " | ".join([title, startup_time])
+        status = " | ".join([title, startup_time, expected_time])
         return "\n".join([status, self._brackets[0].debug_str()])
 
     def get_live_trials(self, runner):
@@ -331,7 +324,9 @@ class _Rung:
     def descending_paused(self):
         for t in self.paused:
             check(t in self.recorded)
-        return sorted(self.paused, key=lambda t: self.recorded[t], reverse=True)
+        return sorted(
+            self.paused, key=lambda t: self.recorded[t], reverse=True
+        )
 
     def cutoff(self):
         if len(self.recorded) > 1:
@@ -365,8 +360,10 @@ class _DeadlineBracket:
     """
 
     # TODO: Implement Rung quantities?
-    # TODO: Implement thresholding/milestones based off of max effective res time
-    def __init__(self, reduction_factor, max_t=100, min_t=1, use_pausing=False):
+    # TODO: Implement thresholding based off of max effective res time
+    def __init__(
+        self, reduction_factor, max_t=100, min_t=1, use_pausing=False
+    ):
         self.rf = reduction_factor
 
         MAX_RUNGS = int(np.log(max_t / min_t) / np.log(reduction_factor) + 1)
@@ -400,7 +397,6 @@ class _DeadlineBracket:
 
     def promotable_trials(self):
         assert self._use_pausing
-        trial_found = False
         for rung in self._rungs:
             if rung.cutoff() is None:
                 continue

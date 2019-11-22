@@ -11,12 +11,10 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 
-import ray
-from ray.tune import tune
 from ray.tune.trial import Resources
 from .utils import create_parser
 
-from hypersched.tune import ResourceTrainable, ResourceExecutor
+from hypersched.tune import ResourceTrainable
 
 mnist.load_data()  # we do this because it's not threadsafe
 
@@ -59,7 +57,7 @@ class MNISTTrainable(ResourceTrainable):
             )
         )
         self.batch_size = min(
-            config["batch_size"] * self.num_threads, config["max_batch_size"]
+            config["batch_size"] * self.num_threads, config["max_batch_size"],
         )
         self.num_batches_per_step = config.get("num_batches_per_step", 1)
         self.val_batches_per_step = max(int(self.num_batches_per_step / 4), 1)
@@ -139,7 +137,7 @@ class MNISTTrainable(ResourceTrainable):
             batch_size=self.batch_size,
             epochs=1,
             verbose=0,
-            validation_data=(x_test[val_randoms], y_test[val_randoms]),
+            validation_data=(x_test[val_randoms], y_test[val_randoms],),
         )
         res = {k: v[-1] for k, v in result.history.items()}
         res["mean_accuracy"] = res["val_acc"]

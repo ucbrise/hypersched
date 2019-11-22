@@ -45,7 +45,14 @@ DEFAULT_HSPACE = {
     "opt": tune.choice(["rmsprop", "adam", "sgd"]),
 }
 
-DEFAULT_SCALING = {1: 1, 2: 1.62, 4: 2.027, 8: 2.75, 16: 2.48, 32: 2.48}
+DEFAULT_SCALING = {
+    1: 1,
+    2: 1.62,
+    4: 2.027,
+    8: 2.75,
+    16: 2.48,
+    32: 2.48,
+}
 
 DEFAULT_MULTIJOB_CONFIG = {
     "min_time_allocation": 20,
@@ -77,7 +84,9 @@ class BABITrainable(ResourceTrainable):
         # embed the input sequence into a sequence of vectors
         input_encoder_m = Sequential()
         input_encoder_m.add(
-            Embedding(input_dim=vocab_size, output_dim=int(config["embedding"]))
+            Embedding(
+                input_dim=vocab_size, output_dim=int(config["embedding"]),
+            )
         )
         input_encoder_m.add(Dropout(config["dropout"]))
         # output: (samples, story_maxlen, embedding_dim)
@@ -146,13 +155,13 @@ class BABITrainable(ResourceTrainable):
 
     def _train(self):
         # x_train, y_train, x_test, y_test = self.data
-        inputs_train, queries_train, answers_train = self.training_dataset
+        (inputs_train, queries_train, answers_train,) = self.training_dataset
         inputs_test, queries_test, answers_test = self.testing_dataset
         randoms = np.random.choice(
-            len(inputs_train), self.batch_size * self.num_batches_per_step
+            len(inputs_train), self.batch_size * self.num_batches_per_step,
         )
         val_randoms = np.random.choice(
-            len(inputs_test), self.batch_size * self.val_batches_per_step
+            len(inputs_test), self.batch_size * self.val_batches_per_step,
         )
         total_samples = randoms.size + val_randoms.size
         result = self.model.fit(

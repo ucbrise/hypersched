@@ -1,6 +1,8 @@
 """
-Originally from: https://github.com/keras-team/keras/blob/master/examples/babi_memnn.py
-#Trains a memory network on the bAbI dataset.
+Originally from:
+https://github.com/keras-team/keras/blob/master/examples/babi_memnn.py
+
+Trains a memory network on the bAbI dataset.
 
 References:
 

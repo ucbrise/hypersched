@@ -50,7 +50,7 @@ class MyTrainableClass(tune.Trainable):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--smoke-test", action="store_true", help="Finish quickly for testing"
+        "--smoke-test", action="store_true", help="Finish quickly for testing",
     )
     parser.add_argument(
         "--ray-address",

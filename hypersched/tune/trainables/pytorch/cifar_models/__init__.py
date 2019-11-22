@@ -1,20 +1,9 @@
 import logging
 
 from .vgg import *
-from .dpn import *
-from .lenet import *
-from .senet import *
-from .pnasnet import *
-from .densenet import *
-from .googlenet import *
 from .shufflenet import *
 from .shufflenetv2 import *
 from .resnet import *
-from .resnext import *
-from .preact_resnet import *
-from .mobilenet import *
-from .mobilenetv2 import *
-from .efficientnet import *
 
 MODEL_DICT = {
     "resnet18": ResNet18,
@@ -77,7 +66,7 @@ logger.setLevel(level=logging.INFO)
 def get_scaling_for_model_string(model_string):
     if model_string not in SCALING_PROFILES:
         logger.warning(
-            "%s not found in profiles - default to resnet50", model_string
+            "%s not found in profiles - default to resnet50", model_string,
         )
         model_string = "resnet50"
     return SCALING_PROFILES[model_string].copy()
