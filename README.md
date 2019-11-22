@@ -29,6 +29,20 @@ HyperSched is implemented as a `TrialScheduler` of [Ray Tune](http://tune.io/).
 
 **Experiment**: A collection of trials.
 
+
+## Results:
+
+HyperSched will allocate resources to the top performing trial
+<div align="center">
+   <p align="center"> <img src="figs/allocation.png" height=240p><br></p>
+</div>
+
+HyperSched can perform better than ASHA under time pressure.
+
+<div align="center">
+   <p align="center"> <img src="figs/results-deadline.png" height=240p><br></p>
+</div>
+
 ## Quick Start
 
 This code has been tested with PyTorch 1.13 and Ray 0.7.6.
