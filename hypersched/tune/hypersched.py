@@ -40,8 +40,34 @@ class HyperSched(FIFOScheduler):
     """Implements the Async Successive Halving with retro kill.
 
     Args:
-        deadline: UTC time.
+        total_atoms (int): Logical representation of total resources available.
+        resource_policy: How to allocate free resources. Choose among
+            "UNIFORM", "RANDOM".
         scaling dict: can be normalized.
+        deadline: When the experiment finishes.
+        allocation_grid (int): Let `allocation_grid` be Z.
+            Do not place/resize job unless the trial allocation < Z or
+            trial allocation % Z == 0.
+        use_pausing: Pause trials instead of killing.
+        grace_period (int): "r" in ASHA. See ASHAv2.py
+        max_t (float): "R" in ASHA. See ASHAv2.py
+        reduction_factor (float): Parameter for exploration/exploit.
+            See ASHAv2.py.
+        time_attr: The metric to use forr tracking time allocation per trial.
+        metric: Optimization metric. Assume INCREASING.
+        _no_speculation (bool): Used for ablation studies. See code for more
+            details.
+        _ignore_overhead (bool): Used for ablation studies. See code for more
+            details.
+        _no_job_limit (bool): Used for ablation studies. See code for more
+            details.
+        _assume_linear (bool): Used for ablation studies. See code for more
+            details.
+        _fixed_exploration (bool): Used for ablation studies. See code for more
+            details.
+        _exploration_ratio: Used for ablation studies. See code for more
+            details.
+
     """
 
     def __init__(
@@ -54,10 +80,10 @@ class HyperSched(FIFOScheduler):
         use_pausing=True,
         grace_period=1,
         reduction_factor=4,
+        max_t=100,
         time_attr="training_iteration",
         metric="episode_reward_mean",
         mode="max",
-        max_t=100,
         _no_speculation=False,
         _ignore_overhead=False,
         _no_job_limit=False,
