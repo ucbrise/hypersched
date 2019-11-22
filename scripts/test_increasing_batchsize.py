@@ -61,6 +61,8 @@ if __name__ == "__main__":
 
     final_df = pd.DataFrame(results)
     if args.write:
-        fname = f"throughput_{str(type(trainable).__name__)}_{timestring()}.csv"
+        fname = (
+            f"throughput_{str(type(trainable).__name__)}_{timestring()}.csv"
+        )
         final_df.to_csv(fname)
         print("wrote to ", fname)

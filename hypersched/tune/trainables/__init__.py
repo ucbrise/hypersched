@@ -64,7 +64,7 @@ def get_multijob_config(trainable_id):
 
 
 def get_scaling(
-    trainable_id, model_string=None, data_string=None, scaling="LINEAR"
+    trainable_id, model_string=None, data_string=None, scaling="LINEAR",
 ):
     if trainable_id == "pytorch":
         if data_string == "cifar":

@@ -1,4 +1,3 @@
-# ray submit cluster_cfg/local-steropes.yaml evaluate_dynamic_asha.py --args="--num-atoms=8 --trainable-id pytorch --num-jobs=50"
 import random
 import os
 import ray
@@ -13,7 +12,6 @@ import uuid
 from hypersched.tune import ResourceExecutor
 from hypersched.utils import timestring
 
-# from hypersched.tune.dynamic_asha import DynamicHyperBandScheduler, DynResourceTimeASHA
 from hypersched.tune.ashav2 import ASHAv2
 from hypersched.tune.hypersched import HyperSched
 from hypersched.tune.summary import Summary
@@ -28,7 +26,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# ray submit cluster_cfg/sgd.yaml --tmux evaluate_dynamic_asha.py --args="--num-atoms=8 --trainable-id pytorch --num-jobs=20 --global-deadline=900 --sched hyper --model-string=resnet18 --result-path='~/socc_playground/resnet18/'"
+# ray submit cluster_cfg/sgd.yaml --tmux evaluate_dynamic_asha.py --args="--num-atoms=8 --trainable-id pytorch --num-jobs=20 --global-deadline=900 --sched hyper --model-string=resnet18 --result-path='~/playground/resnet18/'"
 
 if __name__ == "__main__":
     parser = make_parser()
@@ -39,7 +37,7 @@ if __name__ == "__main__":
         help="Number of atoms to launch Ray with.",
     )
     parser.add_argument(
-        "--num-jobs", default=1, type=int, help="Number of jobs to launch."
+        "--num-jobs", default=1, type=int, help="Number of jobs to launch.",
     )
     parser.add_argument(
         "--target-batch-size", default=None, help="Target batch size"
@@ -54,13 +52,13 @@ if __name__ == "__main__":
         "--max-t", type=int, default=0, help="Max epochs/iterations."
     )
     parser.add_argument(
-        "--global-deadline", default=1200, type=int, help="Target deadline."
+        "--global-deadline", default=1200, type=int, help="Target deadline.",
     )
     parser.add_argument(
-        "--model-string", default="", type=str, help="The model to use"
+        "--model-string", default="", type=str, help="The model to use",
     )
     parser.add_argument(
-        "--data", choices=["cifar", "imagenet", None], help="The data to use"
+        "--data", choices=["cifar", "imagenet", None], help="The data to use",
     )
     parser.add_argument(
         "--grid",
@@ -73,16 +71,16 @@ if __name__ == "__main__":
         "--no-job-limit", action="store_true", help="No Job Limit."
     )
     parser.add_argument(
-        "--no-speculation", action="store_true", help="No speculation."
+        "--no-speculation", action="store_true", help="No speculation.",
     )
     parser.add_argument(
-        "--seed", default=0, type=int, help="Number of jobs to launch."
+        "--seed", default=0, type=int, help="Number of jobs to launch.",
     )
     parser.add_argument(
         "--result-path", default="", type=str, help="Result path"
     )
     parser.add_argument(
-        "--result-file", type=str, help="manual override summary file."
+        "--result-file", type=str, help="manual override summary file.",
     )
 
     args = parser.parse_args(sys.argv[1:])
@@ -217,7 +215,7 @@ if __name__ == "__main__":
         f"jobs={args.num_jobs}-"
         f"atoms={args.num_atoms}-"
         f"{uuid.uuid4().hex[:8]}",
-        **{"num_samples": args.num_jobs, "config": config, "verbose": 1},
+        **{"num_samples": args.num_jobs, "config": config, "verbose": 1,},
         local_dir=args.result_path
         if args.result_path and os.path.exists(args.result_path)
         else None,

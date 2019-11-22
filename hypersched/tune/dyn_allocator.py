@@ -87,7 +87,7 @@ class DynamicAllocator:
         total,
         policy="UNIFORM",
         allocation_grid=None,
-        recharge_period=2,  # This is set because learning rate takes a while to adjust
+        recharge_period=2,  # learning rate takes a while to adjust
         metric="mean_accuracy",
         metric_op=1,
     ):
@@ -124,7 +124,6 @@ class DynamicAllocator:
             f"Cannot track more than {self.total_atoms} atoms.",
         )
         self._initialized = True
-        # logger.info(f"Initialized with {len(self._resource_allocations)} tracked.")
 
     @property
     def total_atoms(self):
@@ -182,7 +181,8 @@ class DynamicAllocator:
                 and proposed_atoms % self._allocation_grid
             ):
                 logger.info(
-                    f"{proposed_atoms} does not fit into {self._allocation_grid}."
+                    f"{proposed_atoms} does not fit "
+                    f"into {self._allocation_grid}."
                 )
                 return False
         # # We can consider allocating resources more aggressively than this.
@@ -219,9 +219,11 @@ class DynamicAllocator:
         )
 
     def reallocate(self, policy):
-        """
-        Dynamic resource reallocation - allocate the available resources from the stopped trial.
-        :param policy:  Either of 'UNIFORM', 'TOP_JOB', 'RANDOM'
+        """Dynamic resource reallocation.
+
+        Allocate the available resources from the stopped trial.
+        Args:
+            policy: Either of 'UNIFORM', 'TOP_JOB', 'RANDOM'
         """
         # Other running trials across the experiment
         sorted_remaining_trials = sorted(
@@ -273,7 +275,9 @@ class DynamicAllocator:
             while sum(softmax_remaining) < remaining_atoms:
                 softmax_remaining[softmax_remaining.argmax()] += 1
 
-            for trial, alloc in zip(sorted_remaining_trials, softmax_remaining):
+            for trial, alloc in zip(
+                sorted_remaining_trials, softmax_remaining
+            ):
                 new_allocation[trial] += alloc
             logger.info(f"Softmax remaining allocation: {softmax_remaining}")
         elif policy == "NONE":

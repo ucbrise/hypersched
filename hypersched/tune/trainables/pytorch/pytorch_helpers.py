@@ -1,34 +1,13 @@
 import math
 import os
 import time
-import sys
 import torch
 import torchvision
-
-# if __name__ == '__main__':
-#     torch.multiprocessing.set_start_method('spawn')
-
-import torch.nn as nn
-import torch.nn.parallel
-import torch.distributed as dist
 import torch.optim
 import torch.utils.data
-import torch.utils.data.distributed
 import torchvision.transforms as transforms
-import torchvision.datasets as datasets
-import torchvision.models as models
-
-from torch.multiprocessing import Pool, Process
-
-import torch
-import torch.nn as nn
-import torch.nn.init as init
-import torch.nn.functional as F
-from torch.autograd import Variable
 
 import ray
-import sys
-import numpy as np
 
 from ..utils import TimerStat
 
@@ -196,11 +175,11 @@ def train(train_loader, model, criterion, optimizer, epoch, max_steps=None):
         with timers["grad"]:
             # compute gradients in a backward pass
             optimizer.zero_grad()
-            if fp16:
-                with amp.scale_loss(loss, optimizer) as scaled_loss:
-                    scaled_loss.backward()
-            else:
-                loss.backward()
+            # if fp16:
+            #     with amp.scale_loss(loss, optimizer) as scaled_loss:
+            #         scaled_loss.backward()
+            # else:
+            loss.backward()
 
         with timers["apply"]:
             # Call step of optimizer to update model params
@@ -292,7 +271,6 @@ def validate(val_loader, model, criterion, max_steps=None):
 
     batch_time = AverageMeter()
     losses = AverageMeter()
-    top1 = AverageMeter()
     # top5 = AverageMeter()
 
     # switch to evaluate mode
@@ -327,13 +305,6 @@ def validate(val_loader, model, criterion, max_steps=None):
             batch_time.update(time.time() - end)
             end = time.time()
 
-            # if i % 100 == 0:
-            #     print('Test: [{0}/{1}]\t'
-            #           'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-            #           'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-            #           'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'.format(
-            #            i, len(val_loader), batch_time=batch_time, loss=losses,
-            #            top1=top1))
     # acc = #top1.avg if type(top1.avg) == int else top1.avg.cpu()
     acc = correct / total
     stats = {

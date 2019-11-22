@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import logging
 import pandas as pd
-import os
 from hypersched.utils import check
 import numpy as np
 import uuid
@@ -21,7 +20,7 @@ class Function:
 
     def step(self, resources, itr):
         check(
-            not (resources > 0 and self._done), "Should not step on a done job!"
+            not (resources > 0 and self._done), "Should not step on done job!"
         )
         self._progress += int(self._scale_factor(resources))
         self._iteration += 1
@@ -67,7 +66,10 @@ class Function:
 
     def debug_string(self):
         return "{}: progress {} - score {} - {}".format(
-            self, self.cpu_time, self.score(), "running" if self.running else ""
+            self,
+            self.cpu_time,
+            self.score(),
+            "running" if self.running else "",
         )
 
     def evaluate(self, cpu_time):
@@ -123,7 +125,7 @@ class DiscreteFunction(Function):
 
 
 class OptimusFunction(DiscreteFunction):
-    """Use Modeling functions from:"""
+    """Use Modeling functions."""
 
     def __init__(self, params=None, scaling={1: 1, 2: 2}):
         self.params = params or np.random.rand(3)
@@ -151,7 +153,10 @@ class OptimusFunction(DiscreteFunction):
         self.progress_needed = None
         for i in range(0, max_t, 5):
             if variance_check(
-                [_loss_curve(int(r), add_noise=False) for r in np.r_[i : i + 5]]
+                [
+                    _loss_curve(int(r), add_noise=False)
+                    for r in np.r_[i : i + 5]
+                ]
             ):
                 self.progress_needed = i
                 break
@@ -162,7 +167,8 @@ class OptimusFunction(DiscreteFunction):
         """Generates a speed function..
 
         Returns:
-            Function: resources (Z) -> steps/sec (Q), with non-linear scaling."""
+            Function: resources (Z) -> steps/sec (Q), with non-linear scaling.
+        """
         # a, b = np.random.rand(2)
         if speed_config:
 

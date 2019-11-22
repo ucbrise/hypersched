@@ -142,7 +142,7 @@ def create_colocated(cls, args, count):
 
 class EarlyStopper:
     def __init__(
-        self, perf_metric="episode_reward_mean", min_delta=1e-4, patience=5
+        self, perf_metric="episode_reward_mean", min_delta=1e-4, patience=5,
     ):
         self._min_delta = min_delta
         self._patience = patience
@@ -153,14 +153,18 @@ class EarlyStopper:
 
     def should_kill(self, trial, result):
         if trial in self._best:
-            if not self.monitor_op(result[self.perf_metric], self._best[trial]):
+            if not self.monitor_op(
+                result[self.perf_metric], self._best[trial]
+            ):
                 self._wait_counter[trial] += 1
                 if self._wait_counter[trial] > self._patience:
                     logger.warning("Killing %s", str(trial))
                     return True
             else:
                 self._wait_counter[trial] = 0
-            self._best[trial] = max(result[self.perf_metric], self._best[trial])
+            self._best[trial] = max(
+                result[self.perf_metric], self._best[trial]
+            )
         else:
             self._best[trial] = result[self.perf_metric]
         return False

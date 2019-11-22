@@ -68,7 +68,9 @@ def plot_scheduler(logdir, metric, save=False, use_wall=False, ax=plt):
 # plots the most recently created results
 if __name__ == "__main__":
     args = parser.parse_args()
-    plot_scheduler(args.logdir, args.metric, save=args.save, use_wall=args.wall)
+    plot_scheduler(
+        args.logdir, args.metric, save=args.save, use_wall=args.wall
+    )
     plt.xlabel("wall" if args.wall else "iterations")
     plt.ylabel(args.metric)
 

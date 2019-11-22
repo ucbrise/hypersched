@@ -3,9 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 from collections import defaultdict
-import math
 import time
-import sys
 import logging
 import tempfile
 import torch
@@ -20,8 +18,6 @@ import socket
 import ray
 from ray.tune.trial import Resources
 from ..utils import TimerStat, create_colocated
-
-import ray
 from ray import tune
 from hypersched.tune import ResourceTrainable
 
@@ -30,19 +26,14 @@ import torch.nn.parallel
 import torch.optim
 import torch.utils.data
 import torch.utils.data.distributed
-import torchvision.transforms as transforms
-import torchvision.datasets as datasets
+from torch.utils.data.distributed import DistributedSampler
 
 from .cifar_models import ResNet18
 from .pytorch_helpers import (
     train,
     validate,
-    state_from_cuda,
-    state_to_cuda,
     Adjuster,
     adjust_learning_rate,
-    mass_download,
-    get_cifar_dataset,
 )
 
 
@@ -68,7 +59,6 @@ DEFAULT_CONFIG = {
         "data_loader_workers": 2,
         "data_loader_pin": False,
         "max_train_steps": None,
-        "fp16": False,
         "max_val_steps": None,
         "decay": True,
     },
@@ -193,17 +183,15 @@ class PyTorchRunner(object):
         with self._timers["setup_model"]:
             trainset, valset = self.data_creator()
 
-            # Create DistributedSampler to handle distributing the dataset across nodes when training
-            # This can only be called after torch.distributed.init_process_group is called
+            # Create DistributedSampler to handle
+            # distributing the dataset across nodes when training
+            # This can only be called after torch.distributed.
+            # init_process_group is called
             logger.warning("Creating distributed sampler")
-            self.train_sampler = torch.utils.data.distributed.DistributedSampler(
-                trainset
-            )
-            self.val_sampler = torch.utils.data.distributed.DistributedSampler(
-                valset
-            )
+            self.train_sampler = DistributedSampler(trainset)
+            self.val_sampler = DistributedSampler(valset)
 
-            # Create the Dataloaders to feed data to the training and validation steps
+            # Create the Dataloaders to feed data to the training and val steps
             logger.warning(f"Using a batch-size of {self.batch_size}")
             self.train_loader = torch.utils.data.DataLoader(
                 trainset,
@@ -234,12 +222,13 @@ class PyTorchRunner(object):
             )
 
             if self.config.get("fp16"):
-                assert (
-                    torch.backends.cudnn.enabled
-                ), "Amp requires cudnn backend to be enabled."
-                model, optimizer = amp.initialize(
-                    model, optimizer, opt_level="O2"
-                )
+                raise NotImplementedError
+                # assert (
+                #     torch.backends.cudnn.enabled
+                # ), "Amp requires cudnn backend to be enabled."
+                # model, optimizer = amp.initialize(
+                #     model, optimizer, opt_level="O2"
+                # )
 
             # Make model DistributedDataParallel
             logger.warning("Creating DDP Model")
@@ -402,7 +391,7 @@ class PyTorchRunner(object):
 class NodeColocatorActor:
     """Object that is called when launching the different nodes
 
-    Should take in N number of gpus in the node (and the location of the cluster?)
+    Should take in N number of gpus in the node (and the loc of the cluster?)
     and create N actors with num_gpu=0 and place them on the cluster.
     """
 
@@ -609,7 +598,9 @@ class PytorchSGD(ResourceTrainable):
         states = []
 
         for worker in self.remote_workers:
-            states += [worker.set_state.remote(worker_state, ckpt["ckpt_path"])]
+            states += [
+                worker.set_state.remote(worker_state, ckpt["ckpt_path"])
+            ]
 
         ray.get(states)
         self._next_iteration_start = time.time()

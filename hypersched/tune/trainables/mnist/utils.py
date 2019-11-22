@@ -4,7 +4,7 @@ import argparse
 def create_parser():
     parser = argparse.ArgumentParser(description="Keras MNIST Example")
     parser.add_argument(
-        "--smoke-test", action="store_true", help="Finish quickly for testing"
+        "--smoke-test", action="store_true", help="Finish quickly for testing",
     )
     parser.add_argument(
         "--use-gpu", action="store_true", help="Use GPU in training."
@@ -55,7 +55,7 @@ def create_parser():
         help="Size of second kernel (default: 3)",
     )
     parser.add_argument(
-        "--poolsize", type=int, default=2, help="Size of Pooling (default: 2)"
+        "--poolsize", type=int, default=2, help="Size of Pooling (default: 2)",
     )
     parser.add_argument(
         "--dropout1",

@@ -1,4 +1,3 @@
-# ray submit cluster_cfg/local-steropes.yaml evaluate_dynamic_asha.py --args="--num-atoms=8 --trainable-id pytorch --num-jobs=50"
 import random
 import os
 import ray

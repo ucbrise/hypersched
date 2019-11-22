@@ -121,7 +121,9 @@ if __name__ == "__main__":
                     "training_iteration": args.num_iters,
                 },
                 resources_per_trial={"cpu": 0, "gpu": 0, "extra_gpu": 1},
-                local_dir="~/ray_results/{}/".format(str(type(sched).__name__)),
+                local_dir="~/ray_results/{}/".format(
+                    str(type(sched).__name__)
+                ),
                 verbose=1,
                 scheduler=sched,
                 queue_trials=True,

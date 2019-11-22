@@ -5,11 +5,7 @@ from __future__ import print_function
 
 import logging
 import os
-import sys
 import time
-import numpy as np
-import random
-from hypersched.utils import check
 
 import ray
 from ray.tune.logger import NoopLogger
@@ -78,4 +74,6 @@ class ResourceExecutor(RayTrialExecutor):
         if trial not in set(self._running.values()):
             self._train(trial)
         else:
-            logger.warning("Trial {} found in running set. NOOP.".format(trial))
+            logger.warning(
+                "Trial {} found in running set. NOOP.".format(trial)
+            )

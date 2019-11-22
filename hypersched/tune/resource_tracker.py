@@ -8,7 +8,12 @@ logger.setLevel(logging.DEBUG)
 
 class EffectiveResourceTimer:
     def __init__(
-        self, deadline, target_util, scaling_fn, optimal_atoms, debug_mode=False
+        self,
+        deadline,
+        target_util,
+        scaling_fn,
+        optimal_atoms,
+        debug_mode=False,
     ):
         self.deadline = deadline
         self.debug_mode = debug_mode
@@ -84,18 +89,18 @@ class EffectiveResourceTimer:
             return 0
 
 
-if __name__ == "__main__":
-    deadline = 60
-    target_usage = 0.7
-    scaling_fn = lambda x: x
-    optimal_atoms = 10
-    tracker = EffectiveResourceTimer(
-        deadline, target_usage, scaling_fn, optimal_atoms, debug_mode=False
-    )
+# if __name__ == "__main__":
+#     deadline = 60
+#     target_usage = 0.7
+#     scaling_fn = lambda x: x
+#     optimal_atoms = 10
+#     tracker = EffectiveResourceTimer(
+#         deadline, target_usage, scaling_fn, optimal_atoms, debug_mode=False,
+#     )
 
-    for i in range(6):
-        time.sleep(i)
-        tracker.on_trial_result("test", 10, 1, 1)
-        tracker.on_trial_result("test2", 10, 5, 2)
-        print(f"Time left till exploit: {tracker.time_left_till_exploit}")
-        print(f"Best Time: {tracker.best_eff_time_covered}")
+#     for i in range(6):
+#         time.sleep(i)
+#         tracker.on_trial_result("test", 10, 1, 1)
+#         tracker.on_trial_result("test2", 10, 5, 2)
+#         print(f"Time left till exploit: {tracker.time_left_till_exploit}")
+#         print(f"Best Time: {tracker.best_eff_time_covered}")
