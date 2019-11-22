@@ -58,13 +58,49 @@ python scripts/evaluate_dynamic_asha.py \
     --model-string resnet18 \
     --data cifar
 ```
-See `scripts` for more usage examples. 
+See `scripts` for more usage examples.
 
 Example Ray cluster configurations are provided in `scripts/cluster_cfg`.
 
 ## Advanced Usage
 
+#### Configuring HyperSched
 
+```python
+# trainable.metric = "mean_accuracy"
+sched = HyperSched(
+    num_atoms,
+    scaling_dict=get_scaling(
+        args.trainable_id, args.model_string, args.data
+    ),  # optional model for scaling
+    deadline=args.global_deadline,
+    resource_policy="UNIFORM",
+    time_attr=multijob_config["time_attr"],
+    mode="max",
+    metric=trainable.metric,
+    grace_period=config["min_allocation"],
+    max_t= config["max_allocation"],
+)
+
+summary = Summary(trainable.metric)
+
+analysis = tune.run(
+  trainable,
+  name=f"{uuid.uuid4().hex[:8]}",
+  num_samples=args.num_jobs,
+  config=config,
+  verbose=1,
+  local_dir=args.result_path
+  if args.result_path and os.path.exists(args.result_path)
+  else None,
+  global_checkpoint_period=600,  # avoid checkpointing completely.
+  scheduler=sched,
+  resources_per_trial=trainable.to_resources(1)._asdict(),  # initial resources
+  trial_executor=ResourceExecutor(
+      deadline_s=args.global_deadline, hooks=[summary]
+  )
+)
+```
 #### Viewing Results
 The `hypersched.tune.Summary` object will log both a text file and also a CSV for "experiment-level" statistics.
 
@@ -136,7 +172,7 @@ This indicates that for the ImageNet experiment, 1 "Trainable iteration" is defi
 
 ## Cite
 
-The proper citation for this work is: 
+The proper citation for this work is:
 ```
 @inproceedings{Liaw:2019:HDR:3357223.3362719,
  author = {Liaw, Richard and Bhardwaj, Romil and Dunlap, Lisa and Zou, Yitian and Gonzalez, Joseph E. and Stoica, Ion and Tumanov, Alexey},
