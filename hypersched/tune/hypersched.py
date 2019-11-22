@@ -15,7 +15,6 @@ from ray.tune.schedulers import FIFOScheduler, TrialScheduler
 from hypersched.utils import check
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 TERM_STATES = (Trial.ERROR, Trial.TERMINATED)
 

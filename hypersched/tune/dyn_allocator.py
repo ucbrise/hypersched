@@ -15,30 +15,6 @@ from ray.tune.trial import Trial, Resources
 from hypersched.utils import check
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-
-def add_resources(original, to_add):
-    cpu = original.cpu + to_add.cpu
-    gpu = original.gpu + to_add.gpu
-    extra_cpu = original.extra_cpu + to_add.extra_cpu
-    extra_gpu = original.extra_gpu + to_add.extra_gpu
-    all_resources = set(original.custom_resources).union(
-        set(to_add.custom_resources)
-    )
-    new_custom_res = {
-        k: original.custom_resources.get(k, 0)
-        + to_add.custom_resources.get(k, 0)
-        for k in all_resources
-    }
-    extra_custom_res = {
-        k: original.extra_custom_resources.get(k, 0)
-        + to_add.extra_custom_resources.get(k, 0)
-        for k in all_resources
-    }
-    return Resources(
-        cpu, gpu, extra_cpu, extra_gpu, new_custom_res, extra_custom_res
-    )
 
 
 def linear_scaling(total_atoms):
