@@ -253,20 +253,6 @@ def adjust_learning_rate(initial_lr, optimizer, epoch, decay=True):
         param_group["lr"] = lr
 
 
-######################################################################
-# Validation Function
-# ~~~~~~~~~~~~~~~~~~~
-#
-# To track generalization performance and simplify the main loop further
-# we can also extract the validation step into a function called
-# ``validate``. This function runs a full validation step of the features
-# model on the input validation dataloader and returns the top-1 accuracy
-# of the model on the validation set. Again, you will notice the only
-# distributed training feature here is setting ``non_blocking=True`` for
-# the training data and labels before they are passed to the model.
-#
-
-
 def validate(val_loader, model, criterion, max_steps=None):
 
     batch_time = AverageMeter()
