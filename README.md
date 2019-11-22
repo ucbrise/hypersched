@@ -6,7 +6,7 @@
 
 An experimental scheduler for accelerated hyperparameter tuning.
 
-People: Richard Liaw, Romil Bhardwaj, Lisa Dunlap, Yitian Zou, Joseph E. Gonzalez, Ion Stoica, Alexey Tumanov
+**People**: Richard Liaw, Romil Bhardwaj, Lisa Dunlap, Yitian Zou, Joseph E. Gonzalez, Ion Stoica, Alexey Tumanov
 
 ## Overview
 
@@ -23,10 +23,12 @@ HyperSched does so by resizing Trials.
 ### Terminology:
 
 **Trial**: One training run of a (randomly sampled) hyperparameter configuration
+
 **Experiment**: A collection of trials.
 
 ## Quick Start
 
+This code has been tested with PyTorch 1.13 and Ray 0.7.6.
 Install with:
 
 ```bash
@@ -51,10 +53,6 @@ python scripts/evaluate_dynamic_asha.py \
     --model-string resnet18 \
     --data cifar
 ```
-
-## High level Code Anatomy
-
-
 
 
 ## Advanced Usage
