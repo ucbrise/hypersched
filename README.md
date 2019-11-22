@@ -12,6 +12,7 @@ For questions, open an issue or email rliaw [at] berkeley.edu
 
 **Please open an issue if you run into errors running the code!**
 
+
 ## Overview
 
 HyperSched a dynamic application-level resource scheduler to track, identify, and preferentially allocate resources to the best performing trials to maximize accuracy by the deadline.
@@ -169,6 +170,10 @@ This indicates that for the ImageNet experiment, 1 "Trainable iteration" is defi
 ## TODOs
 
 - [ ] Move PyTorch Trainable onto `ray.experimental.sgd`
+
+## Talks
+
+[Slides presented at SOCC](assets/hypersched-socc-presentation.pdf)
 
 ## Cite
 
