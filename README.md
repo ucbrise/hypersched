@@ -8,6 +8,10 @@ An experimental scheduler for accelerated hyperparameter tuning.
 
 **People**: Richard Liaw, Romil Bhardwaj, Lisa Dunlap, Yitian Zou, Joseph E. Gonzalez, Ion Stoica, Alexey Tumanov
 
+For questions, open an issue or email rliaw [at] berkeley.edu
+
+**Please open an issue if you run into errors running the code!**
+
 ## Overview
 
 HyperSched a dynamic application-level resource scheduler to track, identify, and preferentially allocate resources to the best performing trials to maximize accuracy by the deadline.
@@ -18,9 +22,7 @@ HyperSched is implemented as a `TrialScheduler` of [Ray Tune](http://tune.io/).
    <p align="center"> <img src="figs/scheduler.png" height=240p><br></p>
 </div>
 
-HyperSched does so by resizing Trials.
-
-### Terminology:
+## Terminology:
 
 **Trial**: One training run of a (randomly sampled) hyperparameter configuration
 
@@ -29,6 +31,9 @@ HyperSched does so by resizing Trials.
 ## Quick Start
 
 This code has been tested with PyTorch 1.13 and Ray 0.7.6.
+
+It is suggested that you install this on a cluster (and not your laptop).  You can easily spin up a Ray cluster using the [Ray cluster Launcher](https://ray.readthedocs.io/en/latest/autoscaling.html).
+
 Install with:
 
 ```bash
@@ -37,7 +42,7 @@ git clone https://github.com/ucbrise/hypersched && cd hypersched
 pip install -e .
 ```
 
-Then:
+Then, you can run CIFAR with a 1800 second deadline, as below:
 
 ```bash
 
@@ -53,7 +58,9 @@ python scripts/evaluate_dynamic_asha.py \
     --model-string resnet18 \
     --data cifar
 ```
+See `scripts` for more usage examples. 
 
+Example Ray cluster configurations are provided in `scripts/cluster_cfg`.
 
 ## Advanced Usage
 
@@ -129,6 +136,7 @@ This indicates that for the ImageNet experiment, 1 "Trainable iteration" is defi
 
 ## Cite
 
+The proper citation for this work is: 
 ```
 @inproceedings{Liaw:2019:HDR:3357223.3362719,
  author = {Liaw, Richard and Bhardwaj, Romil and Dunlap, Lisa and Zou, Yitian and Gonzalez, Joseph E. and Stoica, Ion and Tumanov, Alexey},
